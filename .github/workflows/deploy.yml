@@ -1,0 +1,67 @@
+name: Deploy Flutter Web to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.6'
+        channel: 'stable'
+
+    - name: Get dependencies
+      working-directory: ./flutter_source
+      run: flutter pub get
+
+    - name: Analyze code
+      working-directory: ./flutter_source
+      run: flutter analyze
+
+    - name: Run tests
+      working-directory: ./flutter_source
+      run: flutter test
+
+    - name: Build web
+      working-directory: ./flutter_source
+      run: flutter build web --release --base-href "/abdrrahmenz.github.io/"
+
+    - name: Copy build to root
+      run: |
+        # Remove existing files except .git and source
+        find . -maxdepth 1 -not -name '.git' -not -name 'flutter_source' -not -name '.github' -not -name '.' -exec rm -rf {} \;
+        # Copy build output to root
+        cp -r flutter_source/build/web/* .
+        # Create .nojekyll file for GitHub Pages
+        touch .nojekyll
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
