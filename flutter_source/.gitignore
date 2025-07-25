@@ -1,0 +1,30 @@
+# Flutter/Dart build outputs
+/build/
+/web/
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies
+.packages
+pubspec.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Build artifacts
+*.dill
+*.so
+
+# Generated files
+*.g.dart
+*.mocks.dart
+*.config.dart
