@@ -27,8 +27,16 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.19.6'
+        flutter-version: '3.32.7'
         channel: 'stable'
+
+    - name: Enable web platform
+      working-directory: ./flutter_source
+      run: flutter config --enable-web
+
+    - name: Clean build directory
+      working-directory: ./flutter_source
+      run: flutter clean
 
     - name: Get dependencies
       working-directory: ./flutter_source
@@ -44,7 +52,13 @@ jobs:
 
     - name: Build web
       working-directory: ./flutter_source
-      run: flutter build web --release --base-href "/"
+      run: |
+        echo "Flutter version:"
+        flutter --version
+        echo "Building web app..."
+        flutter build web --release --base-href "/"
+        echo "Build completed. Checking output..."
+        ls -la build/web/
 
     - name: Verify build
       working-directory: ./flutter_source
