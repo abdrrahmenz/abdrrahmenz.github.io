@@ -24,7 +24,7 @@ class FooterWidget extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 60),
-          
+
           if (!isMobile) ...[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,21 +46,27 @@ class FooterWidget extends StatelessWidget {
           ] else ...[
             _buildBrandSection(),
             const SizedBox(height: 40),
-            _buildQuickLinks(),
-            const SizedBox(height: 40),
-            _buildSocialSection(),
+            Row(
+              children: [
+                Expanded(child: _buildQuickLinks()),
+                const SizedBox(width: 16),
+                Expanded(child: _buildSocialSection()),
+              ],
+            ),
+            // const SizedBox(height: 40),
+            // _buildSocialSection(),
           ],
-          
+
           const SizedBox(height: 40),
-          
+
           // Divider
           Container(
             height: 1,
             color: Colors.white.withOpacity(0.2),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Copyright
           if (!isMobile) ...[
             Row(
@@ -97,7 +103,7 @@ class FooterWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ],
-          
+
           const SizedBox(height: 40),
         ],
       ),
@@ -124,7 +130,7 @@ class FooterWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        
+
         // Newsletter Subscription (placeholder)
         Text(
           'Stay Updated',
@@ -177,6 +183,7 @@ class FooterWidget extends StatelessWidget {
               ),
               child: const Text('Subscribe'),
             ),
+            const SizedBox(width: 16),
           ],
         ),
       ],
@@ -234,7 +241,6 @@ class FooterWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        
         _buildSocialLink(
           FontAwesomeIcons.github,
           'GitHub',

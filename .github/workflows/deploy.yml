@@ -2,9 +2,10 @@ name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -43,16 +44,32 @@ jobs:
 
     - name: Build web
       working-directory: ./flutter_source
-      run: flutter build web --release --base-href "/abdrrahmenz.github.io/"
+      run: flutter build web --release --base-href "/"
+
+    - name: Verify build
+      working-directory: ./flutter_source
+      run: |
+        if [ ! -d "build/web" ]; then
+          echo "Build directory not found!"
+          exit 1
+        fi
+        if [ ! -f "build/web/index.html" ]; then
+          echo "index.html not found in build!"
+          exit 1
+        fi
+        echo "Build verification successful"
+        ls -la build/web/
 
     - name: Copy build to root
       run: |
-        # Remove existing files except .git and source
-        find . -maxdepth 1 -not -name '.git' -not -name 'flutter_source' -not -name '.github' -not -name '.' -exec rm -rf {} \;
+        # Remove existing files except .git, source, and .github
+        find . -maxdepth 1 -not -name '.git' -not -name 'flutter_source' -not -name '.github' -not -name '.' -not -name '.gitignore' -not -name 'README.md' -exec rm -rf {} \; 2>/dev/null || true
         # Copy build output to root
         cp -r flutter_source/build/web/* .
         # Create .nojekyll file for GitHub Pages
         touch .nojekyll
+        # List files for debugging
+        ls -la
 
     - name: Setup Pages
       uses: actions/configure-pages@v4

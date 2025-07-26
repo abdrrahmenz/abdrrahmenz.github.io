@@ -21,7 +21,10 @@ class HeroSection extends StatelessWidget {
     final screenHeight = ResponsiveUtils.getScreenHeight(context);
 
     return Container(
-      height: screenHeight * 0.9,
+      constraints: BoxConstraints(
+        minHeight: screenHeight * 0.8,
+        maxHeight: screenHeight * 0.95,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -34,31 +37,32 @@ class HeroSection extends StatelessWidget {
       ),
       child: Padding(
         padding: ResponsiveUtils.getResponsivePadding(context),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!isMobile) ...[
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: _buildContent(context, isMobile),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildProfileImage(context),
-                  ),
-                ],
-              ),
-            ] else ...[
-              _buildProfileImage(context),
-              const SizedBox(height: 32),
-              _buildContent(context, isMobile),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (!isMobile) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: _buildContent(context, isMobile),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildProfileImage(context),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                _buildProfileImage(context),
+                const SizedBox(height: 32),
+                _buildContent(context, isMobile),
+              ],
+              const SizedBox(height: 40),
+              _buildSocialLinks(),
             ],
-            
-            const SizedBox(height: 40),
-            _buildSocialLinks(),
-          ],
+          ),
         ),
       ),
     );
@@ -66,7 +70,8 @@ class HeroSection extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, bool isMobile) {
     return Column(
-      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Text(
           'Hi, I\'m',
@@ -129,8 +134,10 @@ class HeroSection extends StatelessWidget {
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
         const SizedBox(height: 32),
-        Row(
-          mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+        Wrap(
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          spacing: 16,
+          runSpacing: 16,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -139,14 +146,14 @@ class HeroSection extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                 ),
               ),
               child: const Text('Get In Touch'),
             ),
-            const SizedBox(width: 16),
             OutlinedButton(
               onPressed: () {
                 // Download resume
@@ -154,7 +161,8 @@ class HeroSection extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                 ),
@@ -170,7 +178,7 @@ class HeroSection extends StatelessWidget {
   Widget _buildProfileImage(BuildContext context) {
     final isMobile = ResponsiveUtils.isMobile(context);
     final size = isMobile ? 200.0 : 300.0;
-    
+
     return Center(
       child: Container(
         width: size,
@@ -202,8 +210,10 @@ class HeroSection extends StatelessWidget {
   }
 
   Widget _buildSocialLinks() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 24.0,
+      runSpacing: 16.0,
       children: [
         _buildSocialIcon(
           FontAwesomeIcons.github,
@@ -226,28 +236,25 @@ class HeroSection extends StatelessWidget {
   }
 
   Widget _buildSocialIcon(IconData icon, String url) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: GestureDetector(
-        onTap: () => _launchUrl(url),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: FaIcon(
-            icon,
-            size: 20,
-            color: AppColors.primary,
-          ),
+    return GestureDetector(
+      onTap: () => _launchUrl(url),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FaIcon(
+          icon,
+          size: 20,
+          color: AppColors.primary,
         ),
       ),
     );

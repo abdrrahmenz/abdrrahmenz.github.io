@@ -5,7 +5,7 @@ import '../constants/app_constants.dart';
 import '../utils/responsive_utils.dart';
 
 class ProjectsSection extends StatelessWidget {
-  const ProjectsSection({super.key});
+  ProjectsSection({super.key});
 
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);

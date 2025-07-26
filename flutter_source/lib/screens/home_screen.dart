@@ -6,7 +6,6 @@ import '../widgets/skills_section.dart';
 import '../widgets/projects_section.dart';
 import '../widgets/contact_section.dart';
 import '../widgets/footer_widget.dart';
-import '../utils/responsive_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

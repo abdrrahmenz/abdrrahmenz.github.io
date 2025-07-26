@@ -8,8 +8,6 @@ class SkillsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columns = ResponsiveUtils.getResponsiveColumns(context);
-
     return Container(
       padding: ResponsiveUtils.getResponsivePadding(context),
       color: AppColors.background,
